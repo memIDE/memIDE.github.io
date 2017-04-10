@@ -71,7 +71,7 @@ function compile() {
 	// data.append('source', 'person');
 
 
-	xhr.open('POST', "http://memide.herokuapp.com/api/compile", true);
+	xhr.open('POST', "https://memide.herokuapp.com/api/compile", true);
 
 	var params = "";
 	params += addAttribute("source", source);
