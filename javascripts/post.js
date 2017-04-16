@@ -1,4 +1,7 @@
 "use strict";
+
+
+
 function submitForm(oFormElement)
 {
   var xhr = new XMLHttpRequest();
@@ -70,6 +73,7 @@ function compile() {
 
 	// data.append('source', 'person');
 
+	
 
 	xhr.open('POST', "https://memide.herokuapp.com/api/compile", true);
 
@@ -84,6 +88,17 @@ function compile() {
 	// xhr.setRequestHeader("Connection", "close");
 
 	// xhr.onreadystatechange = processRequest;
+
+	firebase.auth().currentUser.getToken(/* forceRefresh */ true).then(function(idToken) {
+				  // Send token to your backend via HTTPS
+				  // ...
+				  console.log(idToken);
+				  params += addAttribute("token", idToken);
+				  xhr.send(params);
+			}).catch(function(error) {
+  					// Handle error
+			});
+
 // 
 	function processRequest(e) {
 		
@@ -102,7 +117,7 @@ function compile() {
     	}
 	}
 
-	xhr.send(params);
+	
 
 
     return source;              // The function returns the product of p1 and p2
