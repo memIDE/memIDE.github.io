@@ -1,27 +1,30 @@
-#mentioned-user-list{
+#mentioned-user-list {
   position: absolute;
-  border: 1px solid #CCC;
+  z-index: 100;
+  width: 200px;
   margin: 0;
   padding: 0;
-  width: 200px;
-  height: 200px;
-  overflow-y: scroll;
+  overflow-y: auto;
+  background: #fff;
+  border: 1px solid #ccc;
 }
-#mentioned-user-list li{
-  border-bottom: 1px solid #CCC;
+#mentioned-user-list li {
   padding: 10px;
+  background: #fff;
+  border-bottom: 1px solid #ccc;
+  cursor: pointer;
   list-style-type: none;
 }
-#mentioned-user-list li:hover{
-  background: #CCC;
+#mentioned-user-list li:hover {
+  background: #ccc;
 }
-#mentioned-user-list li.active{
+#mentioned-user-list li.active {
   background-color: #333;
-  color: #FFF;
+  color: #fff;
 }
-#mentioned-user-list li img{
+#mentioned-user-list li img {
   width: 24px;
   height: 24px;
   margin-right: 10px;
 }
-#mentioned-user-list li span{}
+#mentioned-user-list li span {}

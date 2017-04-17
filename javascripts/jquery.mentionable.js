@@ -1,33 +1,29 @@
-/*!
+/**
  * jQuery Mentionable
  *
- * A jQuery plugin that enables the user to mention other people
+ * A jQuery plugin that enables the user to mention other people.
  *
- * Copyright(c) 2011 Oozou Limited. by Warut Surapat <warut@oozou.com>
  * MIT Licensed.
- *
- * http://www.oozou.com
- * https://github.com/oozou/jquery-mentionable
+ * Forked from https://github.com/oozou/jquery-mentionable
  */
 (function( $ ) {
-  var cachedName            = "";
-  var fullCachedName        = "";
-  var mentioningUser        = false;
-  var textArea              = null;
-  var container             = null;
-  var userListWrapper       = $("<ul id='mentioned-user-list'></ul>");
-  var userList              = null;
-  var inputText             = null;
-  var targetURL             = null;
-  var onComplete            = null;
-  var options               = null;
-  var debugMode             = false;
-  var debuggerBlock         = "<div id='mentionable-debugger'></div>"
-  var caretStartPosition    = 0;
-  var keyRespondingTimeOut  = null;
-  var keyRespondTime        = 500;
-  var listSize              = 0;
-  var isUserFrameShown      = false;
+  var bDeleteExisting       = false;
+  var bIsUserFrameShown     = false;
+  var bMentioningUser       = false;
+  var eContainer            = null;
+  var eTextArea             = null;
+  var eUserList             = null;
+  var eUserListWrapper      = $('<ul id="mentioned-user-list"></ul>');
+  var fnOnComplete          = null;
+  var iCaretStartPosition   = 0;
+  var iCaretEndPosition     = 0;
+  var iKeyRespondingTimeOut = null;
+  var iListSize             = 0;
+  var oOptions              = null;
+  var strCachedName         = '';
+  var strFullCachedName     = '';
+  var strInputText          = null;
+  var strTargetUrl          = null;
 
   var KEY = {
     BACKSPACE:    8,
@@ -49,53 +45,56 @@
     ATSIGN:       64
   };
 
-  /*
-   * make a textarea support user mentioning
+  /**
+   * Make a textarea support user mentioning.
    *
-   * param usersURL             A url to fire an ajax call to retrieve user list.
-   * param opts                 An options:
-   *                              (id) the id of the user list block.
-   *                              (minimumChar) the minimum number of character to trigger user data retrieval
-   *                              (parameterName) the query parameter name
-   *                              (position) the position of the list (right, bottom, left)
-   * param onCompleteFunction   A callback function when user list is retrieved. Expected to be a user item generation.
+   * param strUsersUrl   A url to fire an ajax call to retrieve user list.
+   * param oOpts         Options:
+   *                         (id) the id of the user list block.
+   *                         (minimumChar) the minimum number of character to trigger user data retrieval
+   *                         (parameterName) the query parameter name
+   *                         (position) the position of the list (right, bottom, left)
+   * param fnOnComplete  A callback function when user list is retrieved. Expected to be a user item generation.
    *
    */
-  $.fn.mentionable = function(usersURL, opts, onCompleteFunction) {
-    textArea  = this;
+  $.fn.mentionable = function(strUsersUrl, oOpts, fnOnComplete){
+    eTextArea = this;
 
-    // remove other mentionable text area before enable current one
-    if($("textarea.mentionable-textarea").length){
-      $("textarea.mentionable-textarea").val("");
-      $("textarea.mentionable-textarea").off("keypress");
-      $("textarea.mentionable-textarea").off("keyup");
+    // Remove other mentionable text area before enabling current one
+    if ($('textarea.mentionable-textarea').length) {
+      $('textarea.mentionable-textarea').val('');
+      $('textarea.mentionable-textarea').off('keypress');
+      $('textarea.mentionable-textarea').off('keyup');
     }
 
-    container = textArea.parent();
-    targetURL = usersURL;
-    options   = $.extend({
-      "id" : "mentioned-user-list",
-      "minimumChar" : 2,
-      "parameterName" : "mentioning",
-      "position" : "bottom"
-    }, opts);
-    userListWrapper = $("<ul id='" + options.id + "'></ul>");
+    eContainer = eTextArea.parent();
+    strTargetUrl = strUsersUrl;
+    oOptions = $.extend({
+      'id': 'mentioned-user-list',
+      'maxTags': null,
+      'minimumChar': 1,
+      'parameterName': 'mentioning',
+      'position': 'bottom',
+      'debugMode': false,
+    }, oOpts);
+    eUserListWrapper = $('<ul id="' + oOptions.id + '"></ul>');
 
-    if(debugMode){
-      container.before(debuggerBlock);
-    }
+    if (oOptions.debugMode)
+      eContainer.before('<div id="mentionable-debugger"></div>');
 
+    if ($(this).val() === '@')
+      initNameCaching();
     this.keypress(function(e){
 
       watchKey();
 
-      switch(e.keyCode){
+      switch (e.keyCode) {
         case KEY.ATSIGN:
           initNameCaching();
           break;
         case KEY.ENTER:
-          if(mentioningUser){
-            selectUser(userList.find("li.active"));
+          if (bMentioningUser) {
+            selectUser(eUserList.find('li.active'));
             e.preventDefault();
           }
           hideUserFrame();
@@ -104,37 +103,64 @@
           hideUserFrame();
           break;
         default:
-          // Firefox hacked!
+          // Firefox hack
           // There is a problem on FF that @'s keycode returns 0.
           // The case KEY.ATSIGN fails to catch, so we need to do it here instead
-          if(String.fromCharCode(e.charCode) == "@"){
+          if (String.fromCharCode(e.charCode) == '@') {
             initNameCaching();
-          }
-          else{
+          } else {
             // append pressed character to cache
-            if(cachedName != ""){
-              cachedName += String.fromCharCode(e.charCode);
-            }
+            if (strCachedName != '')
+              strCachedName += String.fromCharCode(e.charCode);
           }
       }
 
-      // if user typed any letter while the caret is not at the end
+      // If user typed any letter while the caret is not at the end
       // completely remove the string behind the caret.
-      fullCachedName = cachedName;
+      strFullCachedName = strCachedName;
+      debug();
     });
-    this.keyup(function(e){
-      switch(e.keyCode){
+    this.keydown(function(e){
+      switch (e.keyCode) {
         case KEY.DELETE:
         case KEY.BACKSPACE:
-          // delete or backspace key is pressed
-          cachedName = cachedName.substring(0, cachedName.length -1);
-          fullCachedName = cachedName;
-          if(cachedName==""){
+          // If deleting back into a mention, reset name caching
+          $('[name="mentioned_id[]"]').each(function(){
+            var iStrposStart = parseInt($(this).attr('data-strpos-start')); // using attr() b/c data() is unwritable
+            var iStrposEnd = parseInt($(this).attr('data-strpos-end'));
+            // Remove the one being deleted
+            if (iStrposStart <= currentCaretPosition() && iStrposEnd >= currentCaretPosition()) {
+              iCaretStartPosition = iStrposStart;
+              iCaretEndPosition = iStrposEnd;
+              bDeleteExisting = true;
+              $(this).attr('data-strpos-end', iStrposEnd - 1);
+              $(this).prop('disabled', true);
+            // Adjust start & end for those following
+            } else if (iStrposStart > currentCaretPosition()) {
+              $(this).attr('data-strpos-start', iStrposStart - 1);
+              $(this).attr('data-strpos-end', iStrposEnd - 1);
+            }
+          });
+          break;
+      }
+    });
+    this.keyup(function(e){
+      switch (e.keyCode) {
+        case KEY.DELETE:
+        case KEY.BACKSPACE:
+          if (bDeleteExisting) {
+            strCachedName = eTextArea.val().substring(iCaretStartPosition, currentCaretPosition());
+            strFullCachedName = eTextArea.val().substring(iCaretStartPosition, iCaretEndPosition);
+          } else {
+            strCachedName = strCachedName.substring(0, strCachedName.length - 1);
+            strFullCachedName = strCachedName;
+          }
+          //bDeleteExisting = false;
+          //remove disabled input
+          if ('' == strCachedName)
             hideUserFrame();
-          }
-          else{
+          else
             watchKey();
-          }
           break;
         case KEY.ESCAPE:
           hideUserFrame();
@@ -151,231 +177,256 @@
           caretMoveRight();
           break;
         case KEY.DOWN:
-        caretMoveDown();
+          caretMoveDown();
           break;
       }
+      debug();
     });
   };
 
-  /*
-   * initialize a cache that store the user name that is being mentioned
+  /**
+   * Initialize a cache that store the user name that is being mentioned.
    */
   function initNameCaching(){
-    caretStartPosition = currentCaretPosition();
-    cachedName         = "@";
+    iCaretStartPosition = currentCaretPosition();
+    strCachedName = '@';
   }
 
-  /*
-   * hide the user list frame, and clear some related stuffs
+  /**
+   * Hide the user list frame, and clear some related stuffs.
    */
   function hideUserFrame(){
-    cachedName     = "";
-    fullCachedName = "";
-    listSize       = 0;
-    mentioningUser = false;
-    if(isUserFrameShown){
-      userList.remove();
-      isUserFrameShown = false;
+    strCachedName = '';
+    strFullCachedName = '';
+    iListSize = 0;
+    bMentioningUser = false;
+    if (bIsUserFrameShown) {
+      eUserList.remove();
+      bIsUserFrameShown = false;
     }
   }
 
-  /*
-   * show the user list frame
+  /**
+   * Show the user list frame.
    */
   function showUserFrame(){
-    container.append(userListWrapper);
-    mentioningUser = true;
+    eContainer.append(eUserListWrapper);
+    bMentioningUser = true;
 
-
-    userList = $("#" + options.id);
-    if(options.position == "left"){
-      userList.css("left", -1 * userList.outerWidth());
-      userList.css("top", 0);
-    }
-    else if(options.position == "right"){
-      userList.css("left", textArea.outerWidth());
-      userList.css("top", 0);
-    }
-    else if(options.position == "bottom"){
-      userList.css("left", 0);
-      userList.css("top", textArea.outerHeight());
-      userList.css("width", textArea.outerWidth());
+    eUserList = $('#' + oOptions.id);
+    if (oOptions.position == 'left') {
+      eUserList.css('left', -1 * eUserList.outerWidth());
+      eUserList.css('top', 0);
+    } else if (oOptions.position == 'right') {
+      eUserList.css('left', eTextArea.outerWidth());
+      eUserList.css('top', 0);
+    } else if (oOptions.position == 'bottom') {
+      eUserList.css('left', 0);
+      eUserList.css('top', eTextArea.outerHeight());
+      eUserList.css('width', eTextArea.outerWidth());
     }
 
-    userList.show();
-    isUserFrameShown = true;
+    eUserList.show();
+    bIsUserFrameShown = true;
   }
 
-  /*
-   * replace @ with empyty string, then fire a request for user list
+  /**
+   * Replace @ with empty string, then fire a request for user list.
+   *
+   * @param string strKeyword
    */
-  function populateItems(keyword){
-    if(keyword.length > options.minimumChar){
+  function populateItems(strKeyword){
+    if (strKeyword.length > oOptions.minimumChar && (!oOptions.maxTags || $('[name="mentioned_id[]"]').length < oOptions.maxTags)) {
 
-      if(!isUserFrameShown){
+      if (!bIsUserFrameShown)
         showUserFrame();
-      }
 
-      userList.html("");
-      var data = {};
-      if(keyword != undefined){
-        data[options.parameterName] = keyword.substring(1, keyword.length);
-      }
-      if(onComplete != undefined){
-        $.getJSON(targetURL, data, onComplete);
-      }
-      else{
-        $.getJSON(targetURL, data, function(data){
-          fillItems(data);
+      eUserList.html('');
+      var oData = {};
+      if (strKeyword != undefined)
+        oData[oOptions.parameterName] = strKeyword.substring(1, strKeyword.length);
+      if ($('[name="mentioned_id[]"]').length) {
+        var aRecipientIds = [];
+        $('[name="mentioned_id[]"]').each(function(){
+          if (!$(this).prop('disabled'))
+            aRecipientIds.push($(this).val());
         });
+        oData.mentioned_id = aRecipientIds;
       }
+      if (fnOnComplete == undefined)
+        fnOnComplete = function(oData){ fillItems(oData); }
+      $.getJSON(strTargetUrl, oData, fnOnComplete);
       bindItemClicked();
     }
   }
 
-  /*
-   * fill user name and image as a list item in user list block
+  /**
+   * Fill user name and image as a list item in user list block.
+   *
+   * @param object oData
    */
-  function fillItems(data){
-    if(data.length > 0){
-      listSize = data.length;
-      $.each(data, function(key, value){
-        userList.append("<li><img src='" + value.image_url + "' /><span>" + value.name + "</span></li>");
+  function fillItems(oData){
+    if (oData.length > 0) {
+      iListSize = oData.length;
+      $.each(oData, function(iKey, oValue){
+        eUserList.append('<li data-friend-id="' + oValue.id
+          + '"><img src="' + oValue.image_url + '"><span>'
+          + oValue.name + '</span></li>');
       });
-      userList.find("li:first-child").attr("class","active");
+      eUserList.find('li:first-child').attr('class', 'active');
       bindItemClicked();
-    }
-    else{
-      userList.append("<li>No user found</li>");
+    } else {
+      eUserList.append('<li>No user found</li>');
     }
   }
 
-  /*
-   * bind item clicked to all item in user list
+  /**
+   * Bind item clicked to all item in user list.
    */
   function bindItemClicked(){
-    // handle when user item is clicked.
-    var userListItems = userList.find("li");
-    userListItems.click(function(){
+    // Handle when user item is clicked
+    var eUserListItems = eUserList.find('li');
+    eUserListItems.click(function(){
       selectUser($(this));
     });
   }
 
-  /*
-   * perform an user selection by adding the selected user name
-   * to the text aprea
+  /**
+   * Perform a user selection by adding the selected user name
+   * to the text area.
+   *
+   * @param element eUserItem
    */
-  function selectUser(userItem){
-    inputText    = textArea.val();
-    replacedText = replaceString(caretStartPosition, caretStartPosition +
-                                  fullCachedName.length, inputText, "@" +
-                                  userItem.find("span").html());
-    textArea.focus();
-    textArea.val(replacedText);
+  function selectUser(eUserItem){
+    var strUserName = eUserItem.find('span').text();
+    strInputText = eTextArea.val();
+    strReplacedText = replaceString(
+      iCaretStartPosition,
+      iCaretStartPosition + strFullCachedName.length,
+      strInputText,
+      '@' + strUserName
+    );
+    eTextArea.focus();
+    eTextArea.val(strReplacedText.trim() + ' ');
+
+    // Update position of following mentions
+    $('[name="mentioned_id[]"]').each(function(){
+      var iStrposStart = parseInt($(this).attr('data-strpos-start')); // using attr() b/c data() is unwritable
+      var iStrposEnd = parseInt($(this).attr('data-strpos-end'));
+      if (iStrposStart > iCaretStartPosition + strFullCachedName.length) {
+        var iDiff = strUserName.length + 1 - strFullCachedName.length; // "+ 1" accounts for @ symbol
+        $(this).attr('data-strpos-start', iStrposStart + iDiff);
+        $(this).attr('data-strpos-end', iStrposEnd + iDiff);
+      }
+    });
+
+    // Save the user id
+    $('[name="mentioned_id[]"][value="' + eUserItem.data('friend-id') + '"]').remove();
+    var eRecipientIds = $('<input type="hidden" name="mentioned_id[]" value="' + eUserItem.data('friend-id')
+      + '" data-strpos-start="' + iCaretStartPosition + '" data-strpos-end="' + (iCaretStartPosition + strUserName.length) + '">');
+    eContainer.append(eRecipientIds);
+
     hideUserFrame();
   }
 
   function caretMoveLeft(){
-    if(mentioningUser){
-      //remove last char from cachedName while maintaining the fullCachedName
-      if(cachedName != "@"){
-        cachedName = fullCachedName.substring(0, cachedName.length - 1);
-      }
-      else{
+    if (bMentioningUser) {
+      // Remove last char from strCachedName while maintaining the strFullCachedName
+      if (strCachedName != '@')
+        strCachedName = strFullCachedName.substring(0, strCachedName.length - 1);
+      else
         hideUserFrame();
-      }
     }
   }
 
   function caretMoveRight(){
-    if(mentioningUser){
-      if(cachedName == fullCachedName){
+    if (bMentioningUser) {
+      if (strCachedName == strFullCachedName) {
         hideUserFrame();
-      }
-      else{
-        //append to the tail the next character retrieved from fullCachedName
-        cachedName = fullCachedName.substring(0, cachedName.length + 1);
+      } else {
+        // Append to the tail the next character retrieved from strFullCachedName
+        strCachedName = strFullCachedName.substring(0, strCachedName.length + 1);
       }
     }
   }
 
   function caretMoveUp(){
-
-    currentUserItem = userList.find("li.active");
-    if(currentUserItem.index() != 0){
-      previousUserItem = currentUserItem.prev();
-      currentUserItem.attr("class","");
-      previousUserItem.attr("class","active");
-      userList.scrollTop(previousUserItem.index()*previousUserItem.outerHeight());
+    eCurrentUserItem = eUserList.find('li.active');
+    if (eCurrentUserItem.index() != 0) {
+      ePreviousUserItem = eCurrentUserItem.prev();
+      eCurrentUserItem.attr('class', '');
+      ePreviousUserItem.attr('class', 'active');
+      eUserList.scrollTop(ePreviousUserItem.index() * ePreviousUserItem.outerHeight());
     }
   }
 
   function caretMoveDown(){
-    currentUserItem = userList.find("li.active");
-    if(currentUserItem.index() != listSize-1){
-      nextUserItem = currentUserItem.next();
-      currentUserItem.attr("class","");
-      nextUserItem.attr("class","active");
-      userList.scrollTop(nextUserItem.index()*nextUserItem.outerHeight());
+    eCurrentUserItem = eUserList.find('li.active');
+    if (eCurrentUserItem.index() != iListSize - 1) {
+      eNextUserItem = eCurrentUserItem.next();
+      eCurrentUserItem.attr('class', '');
+      eNextUserItem.attr('class', 'active');
+      eUserList.scrollTop(eNextUserItem.index() * eNextUserItem.outerHeight());
     }
   }
 
   function debug(){
-    myDebugger = $("#mentionable-debugger");
-    myDebugger.html("<b>cache : </b>" + cachedName +" | <b>full cache : </b>" + fullCachedName);
+    if (oOptions.debugMode) {
+      $('#mentionable-debugger').html(
+        '<b>cache :</b> ' + strCachedName + ' | <b>full cache :</b> ' + strFullCachedName
+      );
+    }
   }
 
-  /*
-   * return an integer of a curret caret position
+  /**
+   * Return an integer of a curret caret position.
    */
   function currentCaretPosition(){
-    caretContainer = textArea[0];
-    return caretContainer.selectionStart;
+    return eTextArea[0].selectionStart;
   }
 
-  /*
-   * replace a part of originalString from [from] to [to] position with addedString
-   * param from               An integer of a begining position
-   * param to                 An itenger of an ending position
-   * param originalString     An original string to be partialy replaced
-   * param addedString        A string to be replaced
+  /**
+   * Replace a part of strOriginal from [iFrom] to [iTo] position with strAdded.
+   *
+   * @param iFrom An integer of a begining position
+   * @param iTo An itenger of an ending position
+   * @param strOriginal An original string to be partialy replaced
+   * @param strAdded A string to be replaced
    */
-  function replaceString(from, to, originalString, addedString){
-    try{
-      if(from == 0){
-        return addedString + originalString.substring(to, originalString.length);
+  function replaceString(iFrom, iTo, strOriginal, strAdded){
+    try {
+      if (0 == iFrom) {
+        return strAdded + strOriginal.substring(iTo, strOriginal.length);
+      } else {
+        strFirstChunk = strOriginal.substring(0, iFrom);
+        strLastChunk = strOriginal.substring(iTo, strOriginal.length);
+        return strFirstChunk + strAdded + strLastChunk;
       }
-      if(from != 0){
-        firstChunk = originalString.substring(0, from);
-        lastChunk  = originalString.substring(to, originalString.length);
-        return firstChunk + addedString + lastChunk;
-      }
-    }
-    catch(error){
-      return originalString;
+    } catch (error) {
+      return strOriginal;
     }
   }
 
-  /*
-   * initialize the key timeout. It will observe the user interaction.
+  /**
+   * Initialize the key timeout. It will observe the user interaction.
    * If the user did not respond within a specific time, e.g. pausing typing,
    * it will fire poplateItems()
    */
   function watchKey(){
-    clearTimeout(keyRespondingTimeOut);
-    keyRespondingTimeOut = setTimeout(
+    clearTimeout(iKeyRespondingTimeOut);
+    iKeyRespondingTimeOut = setTimeout(
       function(){
-        populateItems(cachedName);
+        populateItems(strCachedName);
       },
-      keyRespondTime
+      500
     );
   }
 
-  /*
-   * return a jquery object of the user list item that is in an active state
+  /**
+   * Return a jQuery object of the user list item that is in an active state.
    */
   function activeUserItemIndex(){
-    return userList.find("li.active").index();
+    return eUserList.find('li.active').index();
   }
 
 })( jQuery );
