@@ -36,3 +36,14 @@ function addFunc(){
 
    
 }
+
+function getFunc(){
+    var title = "first_title";
+
+    var userId = firebase.auth().currentUser.uid;
+    var ref =  firebase.database().ref('/user-functions/' + userId);
+    ref.orderByChild("title").startAt("f").on("child_added", function(snapshot) {
+      console.log(snapshot.key);
+    });
+
+}

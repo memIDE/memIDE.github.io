@@ -100,12 +100,10 @@ function compile() {
 			});
 
 // 
-	function processRequest(e) {
-		
+	function processRequest(e) {	
 		console.log(xhr.readyState);
 		console.log(xhr.status);
     	console.log("inside processRequest");
-
  		if (xhr.readyState == 4 && xhr.status == 200) {
         	// time to partay!!!
         	    	console.log("inside xhr");
@@ -116,17 +114,18 @@ function compile() {
         	// alert(response);
     	}
 	}
-
-	
-
-
     return source;              // The function returns the product of p1 and p2
 }
 
 function afterCompile(response){
 	console.log(response.message);
 	if(response.message == "OK"){
-		console.log("if");
+		if(response.compile_status == "OK"){
+			console.log("compile successeful");
+		}
+		else{
+			console.log(response.compile_status);
+		}
 	}
 }
 
