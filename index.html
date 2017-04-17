@@ -280,7 +280,6 @@
                 <li> <a href="#">func3</a> </li>
                 <li> <a href="#">func4</a> </li> -->
                 <li> <a href="#popup1">add function</a> </li>
-
             </ul>
         </li>
     </ul>
@@ -307,13 +306,13 @@
 <div id="popup1" class="overlay">
   <div class="popup">
     <h4>Function Name:</h4>
-    <textarea placeholder="Enter function name here"></textarea>
+    <textarea placeholder="Enter function name here" id="popup_title"></textarea>
     <a class="close" href="#">x</a>
     <div class="content">
       <h5>Code</h5>
-      <textarea placeholder="Enter code here" rows="28" cols="60" ></textarea>
+      <textarea placeholder="Enter code here" rows="28" cols="60" id="popup_body"></textarea>
     </div>
-    <button id="save_button" onclick="save()">Save</button>
+    <button id="save_button" onclick="addFunc()">Save</button>
   </div>
 </div>  
 

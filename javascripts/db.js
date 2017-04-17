@@ -22,8 +22,8 @@ function writeNewFunc(uid, username, title, body) {
 }
 
 function addFunc(){
-   var title = "first_title";
-   var body = "first_body";
+   var title = document.getElementById("popup_title").value;
+   var body = document.getElementById("popup_body").value;
    var userId = firebase.auth().currentUser.uid;
    writeNewFunc(userId, "Anonymus", title, body);
 
@@ -31,7 +31,7 @@ function addFunc(){
 
 function loadFuncs(){
    var userId = firebase.auth().currentUser.uid;
-  var ref =  firebase.database().ref('/user-functions/' + userId);
+   var ref =  firebase.database().ref('/user-functions/' + userId);
    var funcList = document.getElementById("submenu");
    ref.once('value', function(snapshot) {
       snapshot.forEach(function(childSnapshot) {
@@ -39,7 +39,7 @@ function loadFuncs(){
         var ul = document.getElementById("submenu");
         var a = document.createElement("a");
         a.href = "#";
-        a.appendChild(document.createTextNode(childSnapshot.title );
+        a.appendChild(document.createTextNode(childSnapshot.title ));
         var li = document.createElement("li");
         li.appendChild(a);
         ul.appendChild(li);
@@ -47,7 +47,6 @@ function loadFuncs(){
         // ...
       });
     });
-  var topUserPostsRef = firebase.database().ref('/user-functions/' + userId).orderByChild('title');
 }
 
 function getFunc(startString, callback){
@@ -80,6 +79,3 @@ function getFunc(startString, callback){
     
 }
 
-function importFunc(){
-    
-}
