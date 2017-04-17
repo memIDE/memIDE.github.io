@@ -16,22 +16,11 @@
   <script type="text/javascript" src="./javascripts/post.js"></script>
   <script type="text/javascript" src="./javascripts/db.js"></script>
 
-  <script type="text/javascript" src="./javascripts/jquery.mentionable.js"></script>
   <link rel="stylesheet" type="text/css" href="./stylesheets/main.css" />
   <link rel="stylesheet" type="text/css" href="./stylesheets/linedtextarea.css" />
-  <link rel="stylesheet" type="text/css" href="./stylesheets/jquery.mentionable.css" />
-  <link href='./stylesheets/jquery.mentionable.css' media="all" rel="stylesheet" type="text/css">
-
-  <script type="text/javascript">
-    $("#source").mentionable(
-        "https://api.myjson.com/bins/y8oev",
-        {minimumChar: 3, parameterName: "name"}
-    );
-  </script>
 
   <style>
      ul.wtf-menu{
-     margin: 100px auto 0px;
      padding: 0px 10px;
      width: 130px;
      background: #fff;
@@ -113,12 +102,131 @@
 
   div.fixed{
     position: fixed;
-    top: 30px;
-    right: 160px;
+    left : 180px;
     width: 140px;
-    height: 300px;
+    float: right;
     <!-- border: 3px solid #73AD21; -->
   }
+  span.container{
+    position: relative;
+    float: left;
+    left: 25%;
+    <!-- border: 3px solid #73AD21; -->
+  }
+  span.inout{
+    position: relative;
+    float: left;
+    left: 25%;
+    <!-- border: 3px solid #73AD21; -->
+  }
+  #compile_button{
+    float: right;
+    position: relative;
+    right: 32%;
+  }
+  #run_button{
+    float:right;
+    position: relative;
+    right: 22.1%;
+
+  }
+  
+  div.inout{
+    position: relative;
+    left: 25.7%;
+  }
+  div.io_header{
+    position: relative;
+    top: 405px;
+    right: 1150px;
+  }
+
+  #view_edit_input{
+    position: relative;
+    top: 465px;
+    right: 1150px;
+
+  }
+  #view_edit_output{
+    position: relative;
+    top: 465px;
+    right: 1050px;
+  }
+
+  .box {
+  width: 20%;
+  margin: 0 auto;
+  background: rgba(255,255,255,0.2);
+  padding: 35px;
+  border: 2px solid #fff;
+  border-radius: 20px/50px;
+  background-clip: padding-box;
+  text-align: center;
+}
+
+.button {
+  font-size: 1em;
+  padding: 10px;
+  color: #fff;
+  border: 2px solid orange;
+  border-radius: 20px/50px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.3s ease-out;
+}
+.button:hover {
+  background: orange;
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.7);
+  transition: opacity 500ms;
+  visibility: hidden;
+  opacity: 0;
+}
+.overlay:target {
+  visibility: visible;
+  opacity: 1;
+}
+
+.popup {
+  margin: 70px auto;
+  padding: 20px;
+  background: #fff;
+  border-radius: 5px;
+  width: 30%;
+  position: relative;
+  transition: all 5s ease-in-out;
+}
+
+.popup h2 {
+  margin-top: 0;
+  color: #333;
+  font-family: Tahoma, Arial, sans-serif;
+}
+.popup .close {
+  position: absolute;
+  top: 20px;
+  right: 30px;
+  transition: all 200ms;
+  font-size: 30px;
+  font-weight: bold;
+  text-decoration: none;
+  color: #333;
+}
+.popup .close:hover {
+  color: orange;
+}
+.popup .content {
+  max-height: 30%;
+  overflow: auto;
+}
+
   </style>
 </head>
 
@@ -128,42 +236,34 @@
   <div class="container">
     <ul class="nav navbar-nav">
       <li class="active">
-        <a href="/"><span class="glyphicon glyphicon-home"></span> Home</a>
-      </li>
-      <li>
-        <a href="https://devcenter.heroku.com/articles/how-heroku-works"><span class="glyphicon glyphicon-user"></span> How Heroku Works</a>
-      </li>
-      <li class="dropdown">
-        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><span class="glyphicon glyphicon-info-sign"></span> Getting Started Guides <span class="caret"></span></a>
-          <ul class="dropdown-menu" role="menu">
-            <li><a href="https://devcenter.heroku.com/articles/getting-started-with-ruby">Getting Started with Ruby on Heroku</a></li>
-            <li class="divider"></li>
-            <li><a href="https://devcenter.heroku.com/articles/getting-started-with-heroku-and-connect-without-local-dev">Getting Started on Heroku with Heroku Connect</a></li>
-            <li><a href="https://devcenter.heroku.com/articles/getting-started-with-jruby">Getting Started with Ruby on Heroku (Microsoft Windows)</a></li>
-          </ul>
-      </li>
-    </ul>
-    <ul class="nav navbar-nav navbar-right">
-      <li class="navbar-right">
-        <a href="https://devcenter.heroku.com"><span class="glyphicon glyphicon-book"></span> Heroku Dev Center</a>
+        <a href="/"><span class="glyphicon glyphicon-home"></span> MemIDE</a>
       </li>
     </ul>
   </div>
 </nav>
 
 
-<div class="container">
+<span class="container">
 <!-- <form action="/api/compile" method="post">
- -->  <textarea class="lined" rows="25" cols="120" id="source"></textarea>  
+ -->  <textarea class="lined" rows="25" cols="100" id="source"></textarea>  
+
+ <script type="text/javascript">
+    $("#source").mentionable(
+        "https://api.myjson.com/bins/y8oev",
+        {minimumChar: 2, parameterName: "name"}
+    );
+  </script>
   <!-- <input type="submit" value="Email" class="submitButton"> -->
-  <button onclick="compile()">Compile</button>
-  <button onclick="run()">Run</button>
+  <button id="compile_button" onclick="compile()">Compile</button>
+  <button id="run_button" onclick="run()">Run</button>
+
+</span>
 
 <!-- </form> -->
-
+<!-- 
 <div class="funcAdder">
 
-</div>
+</div> -->
 <div class="fixed" style="color:blue">
   <nav class="menu-1">
     <ul class="wtf-menu">
@@ -173,13 +273,43 @@
                 <li> <a href="#">func2</a> </li>
                 <li> <a href="#">func3</a> </li>
                 <li> <a href="#">func4</a> </li>
-                <li> <a href="#">add function</a> </li>
+                <li> <a href="#popup1">add function</a> </li>
 
             </ul>
         </li>
     </ul>
   </nav>
 </div>
+
+<div class="inout">
+  <!--div class="io_header" style="height: 24px;">
+    <ul class="nav">
+      <li><a href="#" id="view_edit_input_btn" class="active">Input</a></li>
+      <li><a href="#" id="view_edit_output_btn">Output</a></li>
+    </ul> 
+  </div-->
+  <textarea name="view_edit_input" id="view_edit_input" placeholder="Input" rows="8" cols="40" tabindex="1" style="height: 160px;"></textarea>
+  <textarea name="view_edit_output" id="view_edit_output" placeholder="Output" rows="8" cols="40" tabindex="1" style="height: 160px;"></textarea>
+  </div>
+</div>
+
+<!-- <div class="inout">
+  <div class="io_header">
+    <ul class="io">
+      <li><a href="#" id="io_field">Input</a></li> -->
+
+<div id="popup1" class="overlay">
+  <div class="popup">
+    <h4>Function Name:</h4>
+    <textarea placeholder="Enter function name here"></textarea>
+    <a class="close" href="#">x</a>
+    <div class="content">
+      <h5>Code</h5>
+      <textarea placeholder="Enter code here" rows="28" cols="60" ></textarea>
+    </div>
+    <button id="save_button" onclick="save()">Save</button>
+  </div>
+</div>  
 
 
 <script>
@@ -246,3 +376,4 @@ $(function() {
 
 </body>
 </html>
+
