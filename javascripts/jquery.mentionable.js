@@ -24,6 +24,7 @@
   var strFullCachedName     = '';
   var strInputText          = null;
   var strTargetUrl          = null;
+  var strFunc = '';
 
   var KEY = {
     BACKSPACE:    8,
@@ -285,6 +286,7 @@
             eUserList.append('<li data-friend-id="' + oValue.uid
             + '"><img src="' + image_url + '"><span>'
             + oValue.title + '</span></li>');
+            strFunc = oValue.body;
       });
       eUserList.find('li:first-child').attr('class', 'active');
       bindItemClicked();
@@ -319,6 +321,8 @@
       strInputText,
       '@' + strUserName
     );
+
+    strReplacedText = addBodyString(strReplacedText, strFunc);
     eTextArea.focus();
     eTextArea.val(strReplacedText.trim() + ' ');
 
@@ -414,6 +418,20 @@
         strFirstChunk = strOriginal.substring(0, iFrom);
         strLastChunk = strOriginal.substring(iTo, strOriginal.length);
         return strFirstChunk + strAdded + strLastChunk;
+      }
+    } catch (error) {
+      return strOriginal;
+    }
+  }
+
+  function addBodyString(strOriginal, strAdded){
+    try {
+      if (0 == iFrom) {
+        return strAdded + strOriginal.substring(iTo, strOriginal.length);
+      } else {
+        var strFirstChunk1 = strOriginal.substring(0, 50);
+        var strLastChunk1 = strOriginal.substring(50, strOriginal.length);
+        return strFirstChunk1 + strAdded + strLastChunk1;
       }
     } catch (error) {
       return strOriginal;
