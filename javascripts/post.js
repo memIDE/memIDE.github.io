@@ -61,7 +61,6 @@ function compile() {
 	var source = document.getElementById("source").value;
 	// var data = {};
 	// data["source"] = source;
-	console.log(source);
 
 	// post("/api/compile", data);
 
@@ -90,38 +89,34 @@ function compile() {
 	// xhr.onreadystatechange = processRequest;
 
 	firebase.auth().currentUser.getToken(/* forceRefresh */ true).then(function(idToken) {
-				  // Send token to your backend via HTTPS
-				  // ...
-				  console.log(idToken);
+				  
 				  params += addAttribute("token", idToken);
 				  xhr.send(params);
 			}).catch(function(error) {
-  					// Handle error
+  					console.log(error);
 			});
 
 // 
 	function processRequest(e) {	
-		console.log(xhr.readyState);
-		console.log(xhr.status);
-    	console.log("inside processRequest");
+		// console.log(xhr.readyState);
+		// console.log(xhr.status);
+  //   	console.log("inside processRequest");
  		if (xhr.readyState == 4 && xhr.status == 200) {
-        	// time to partay!!!
-        	    	console.log("inside xhr");
 
         	var response = JSON.parse(xhr.responseText);
-        	afterCompile(response);
-        	console.log(response);
+        	afterCompile(response, source);
         	// alert(response);
     	}
 	}
     return source;              // The function returns the product of p1 and p2
 }
 
-function afterCompile(response){
+function afterCompile(response, source){
 	console.log(response.message);
 	if(response.message == "OK"){
 		if(response.compile_status == "OK"){
-			console.log("compile successeful");
+			runCode(source);
+			console.log("Compile successeful");
 		}
 		else{
 			console.log(response.compile_status);
@@ -129,3 +124,39 @@ function afterCompile(response){
 	}
 }
 
+function runCode(source){
+	var xhr = new XMLHttpRequest();
+	xhr.open('POST', "https://memide.herokuapp.com/api/run", true);
+
+	var params = "";
+	params += addAttribute("source", source);
+
+	xhr.addEventListener("readystatechange", processRunRequest, false);
+	xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
+	firebase.auth().currentUser.getToken(true).then(function(idToken) {
+		  params += addAttribute("token", idToken);
+		  xhr.send(params);
+		}).catch(function(error) {
+  				
+		});
+
+	function processRunRequest(e) {	
+ 		if (xhr.readyState == 4 && xhr.status == 200) {
+        	var response = JSON.parse(xhr.responseText);
+        	afterRun(response);
+    	}
+	}
+    return source;  
+}
+
+function afterRun(response, source){
+	if(response.message == "OK"){
+		if(response.compile_status == "OK"){
+			console.log(response.run_status.output);
+		}
+		else{
+			console.log(response.compile_status);
+		}
+	}
+}
