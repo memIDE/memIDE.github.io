@@ -417,11 +417,11 @@
       if (0 == iFrom) {
         return strAdded + strOriginal.substring(iTo, strOriginal.length);
       } else {
-        strFirstChunk = strOriginal.substring(0, iFrom-1);
+        strFirstChunk = strOriginal.substring(0, iFrom);
         console.log(strFirstChunk);
         console.log(strAdded);
 
-
+        strAdded = strAdded.substring(1,strAdded.length);
         strLastChunk = strOriginal.substring(iTo, strOriginal.length);
        console.log(strLastChunk);
 
