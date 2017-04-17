@@ -29,22 +29,55 @@ function addFunc(){
 
 }
 
+function loadFuncs(){
+   var userId = firebase.auth().currentUser.uid;
+  var ref =  firebase.database().ref('/user-functions/' + userId);
+   var funcList = document.getElementById("submenu");
+   ref.once('value', function(snapshot) {
+      snapshot.forEach(function(childSnapshot) {
+
+        var ul = document.getElementById("submenu");
+        var a = document.createElement("a");
+        a.href = "#";
+        a.appendChild(document.createTextNode(childSnapshot.title );
+        var li = document.createElement("li");
+        li.appendChild(a);
+        ul.appendChild(li);
+         console.log(childSnapshot);
+        // ...
+      });
+    });
+  var topUserPostsRef = firebase.database().ref('/user-functions/' + userId).orderByChild('title');
+}
+
 function getFunc(startString, callback){
     var title = "first_title";
 
     var userId = firebase.auth().currentUser.uid;
     var ref =  firebase.database().ref('/user-functions/' + userId);
-    var jsonArray = [];
+   
+
+    // firebase.database().ref('/user-functions/' + userId).once('value').then(function(snapshot) {
+    //   var username = snapshot.val().username;
+    //   // ...
+    // });
+
+
     ref.orderByChild("title").startAt(startString).on("child_added", function(snapshot) {
+       var jsonArray = [];
+      var jsonLength = 0;
       jsonArray.push(snapshot.val());
+      jsonLength = jsonLength + 1;
+      callback(jsonArray, jsonLength);
     });
     //console.log(jsonArray);
     console.log("in db");
-         console.log(jsonArray);
+   console.log(jsonArray);
+   console.log(jsonLength);
 
           
 
-    callback(jsonArray);
+    
 }
 
 function importFunc(){

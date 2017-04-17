@@ -262,7 +262,7 @@
 
       var name_temp = strCachedName.substring(1, strCachedName.length);
       console.log(name_temp);
-      getFunc(name_temp, function(x){ fillItems(x);  });
+      getFunc(name_temp, function(x, jsonLength){ fillItems(x, jsonLength);  });
     
       bindItemClicked();
     }
@@ -273,12 +273,12 @@
    *
    * @param object oData
    */
-  function fillItems(oData){
+  function fillItems(oData, jsonLength){
     console.log(oData);
-    console.log(oData.length);
-    if (oData.length > 0) {
-      iListSize = oData.length;
-      console.log(oData);
+    console.log(jsonLength);
+    if (jsonLength > 0) {
+      iListSize = jsonLength;
+      console.log(jsonLength);
       
       var image_url = "image";
       $.each(oData, function(iKey, oValue){
