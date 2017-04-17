@@ -14,8 +14,19 @@
   
   <script type="text/javascript" src="./javascripts/linedtextarea.js"></script>
   <script type="text/javascript" src="./javascripts/post.js"></script>
+
+  <script type="text/javascript" src="./javascripts/jquery.mentionable.js"></script>
   <link rel="stylesheet" type="text/css" href="./stylesheets/main.css" />
   <link rel="stylesheet" type="text/css" href="./stylesheets/linedtextarea.css" />
+  <link rel="stylesheet" type="text/css" href="./stylesheets/jquery.mentionable.css" />
+  <link href='./stylesheets/jquery.mentionable.css' media="all" rel="stylesheet" type="text/css">
+
+  <script type="text/javascript">
+    $("#source").mentionable(
+        "https://api.myjson.com/bins/g9dxz",
+        {minimumChar: 3, parameterName: "filter"}
+    );
+  </script>
 
   <style>
      ul.wtf-menu{

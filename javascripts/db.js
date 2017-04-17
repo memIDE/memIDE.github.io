@@ -24,17 +24,9 @@ function writeNewFunc(uid, username, title, body) {
 function addFunc(){
    var title = "first_title";
    var body = "first_body";
+   var userId = firebase.auth().currentUser.uid;
+   writeNewFunc(userId, "Anonymus", title, body);
 
-   firebase.auth().onAuthStateChanged(function(user) {
-      if (user) {
-        writeNewFunc(user.uid, "Anonymus", title, body);
-        // User is signed in.
-      } else {
-        // No user is signed in.
-      }
-    });
-
-   
 }
 
 function getFunc(){
@@ -46,4 +38,8 @@ function getFunc(){
       console.log(snapshot.key);
     });
 
+}
+  
+function importFunc(){
+    
 }
