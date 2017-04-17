@@ -40,7 +40,10 @@ function getFunc(startString, callback){
     });
     console.log(jsonArray);
     callback(jsonArray);
+}
 
+function test(){
+  alert("test");
 }
   
 function importFunc(){

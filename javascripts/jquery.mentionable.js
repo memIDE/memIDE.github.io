@@ -256,10 +256,14 @@
         oData.mentioned_id = aRecipientIds;
       }
       if (fnOnComplete == undefined)
-        fnOnComplete = function(oData){ fillItems(oData); }
+        fnOnComplete = function(oData){ fillItems(oData);
+        console.log();
+         }
 
       var name_temp = strCachedName.substring(1, strCachedName.length);
-      getFunc(name_temp, fnOnComplete);
+      getFunc(name_temp, function(x){ fillItems(oData);});
+      test();
+
       bindItemClicked();
     }
   }
@@ -435,5 +439,7 @@
   function activeUserItemIndex(){
     return eUserList.find('li.active').index();
   }
+
+
 
 })( jQuery );
