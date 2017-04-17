@@ -418,7 +418,13 @@
         return strAdded + strOriginal.substring(iTo, strOriginal.length);
       } else {
         strFirstChunk = strOriginal.substring(0, iFrom-1);
+        console.log(strFirstChunk);
+        console.log(strAdded);
+
+
         strLastChunk = strOriginal.substring(iTo, strOriginal.length);
+       console.log(strLastChunk);
+
         return strFirstChunk + strAdded + strLastChunk;
       }
     } catch (error) {
