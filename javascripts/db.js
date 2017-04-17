@@ -41,7 +41,7 @@ function loadFuncs(){
    var funcList = document.getElementById("submenu");
 
 
-    ref.orderByChild("title").startAt(startString).on("", function(snapshot) {
+    ref.orderByChild("title").startAt("").on("child_added", function(snapshot) {
          var ul = document.getElementById("submenu");
         var a = document.createElement("a");
         a.href = "#";
@@ -99,7 +99,7 @@ function getFunc(startString, callback){
 function onloadMethod(){
   firebase.auth().onAuthStateChanged(function(user) {
   if (user) {
-    loadFuncs();
+    loadFuncs()
   } else {
     // No user is signed in.
   }
