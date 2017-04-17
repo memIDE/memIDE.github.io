@@ -275,6 +275,7 @@
    */
   function fillItems(oData){
     console.log(oData);
+    console.log(oData.length);
     if (oData.length > 0) {
       iListSize = oData.length;
       console.log(oData);
