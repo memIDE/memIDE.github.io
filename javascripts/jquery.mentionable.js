@@ -427,17 +427,22 @@
   }
 
   function addBodyString(strOriginal, strAdded){
-    try {
-      if (0 == iFrom) {
-        return strAdded + strOriginal.substring(iTo, strOriginal.length);
-      } else {
+      if(strOriginal.length > 50){
         var strFirstChunk1 = strOriginal.substring(0, 50);
+
         var strLastChunk1 = strOriginal.substring(50, strOriginal.length);
+         console.log(strFirstChunk1);
+                  console.log(strLastChunk1);
+                           console.log(strAdded);
+
         return strFirstChunk1 + strAdded + strLastChunk1;
+
       }
-    } catch (error) {
-      return strOriginal;
-    }
+      else{
+         console.log(strAdded);
+                           console.log(strOriginal);
+        return strAdded + strOriginal; 
+      }
   }
 
   /**
