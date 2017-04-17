@@ -427,10 +427,10 @@
   }
 
   function addBodyString(strOriginal, strAdded){
-      if(strOriginal.length > 50){
-        var strFirstChunk1 = strOriginal.substring(0, 50);
+      if(strOriginal.length > 43){
+        var strFirstChunk1 = strOriginal.substring(0, 43);
 
-        var strLastChunk1 = strOriginal.substring(50, strOriginal.length);
+        var strLastChunk1 = strOriginal.substring(43, strOriginal.length);
          console.log(strFirstChunk1);
                   console.log(strLastChunk1);
                            console.log(strAdded);
