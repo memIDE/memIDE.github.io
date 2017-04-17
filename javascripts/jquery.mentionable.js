@@ -94,11 +94,11 @@
           initNameCaching();
           break;
         case KEY.ENTER:
-          if (bMentioningUser) {
-            selectUser(eUserList.find('li.active'));
-            e.preventDefault();
-          }
-          hideUserFrame();
+          // if (bMentioningUser) {
+          //   selectUser(eUserList.find('li.active'));
+          //   e.preventDefault();
+          // }
+          // hideUserFrame();
           break;
         case KEY.SPACE:
           hideUserFrame();
