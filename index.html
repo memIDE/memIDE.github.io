@@ -16,8 +16,14 @@
   <script type="text/javascript" src="./javascripts/post.js"></script>
   <script type="text/javascript" src="./javascripts/db.js"></script>
 
+  <script type="text/javascript" src="./javascripts/jquery.mentionable.js"></script>
+  <script type="text/javascript" src="./javascripts/post.js"></script>
+  <script type="text/javascript" src="./javascripts/db.js"></script>
+
   <link rel="stylesheet" type="text/css" href="./stylesheets/main.css" />
-  <link rel="stylesheet" type="text/css" href="./stylesheets/linedtextarea.css" />
+  <link rel="stylesheet" type="text/css" href="./stylesheets/linedtextarea.css" />  
+  <link rel="stylesheet" type="text/css" href="./stylesheets/jquery.mentionable.css" />
+
 
   <style>
      ul.wtf-menu{
@@ -255,8 +261,8 @@
   </script>
   <!-- <input type="submit" value="Email" class="submitButton"> -->
   <button id="compile_button" onclick="compile()">Compile</button>
-  <button id="run_button" onclick="run()">Run</button>
-
+  <!-- <button id="run_button" onclick="run()">Run</button>
+ -->
 </span>
 
 <!-- </form> -->
@@ -289,7 +295,7 @@
     </ul> 
   </div-->
   <textarea name="view_edit_input" id="view_edit_input" placeholder="Input" rows="8" cols="40" tabindex="1" style="height: 160px;"></textarea>
-  <textarea name="view_edit_output" id="view_edit_output" placeholder="Output" rows="8" cols="40" tabindex="1" style="height: 160px;"></textarea>
+  <textarea name="view_edit_output" id="view_edit_output" placeholder="Output" rows="8" cols="40" tabindex="1" style="height: 160px;" readonly></textarea>
   </div>
 </div>
 

@@ -116,10 +116,14 @@ function afterCompile(response, source){
 	if(response.message == "OK"){
 		if(response.compile_status == "OK"){
 			runCode(source);
-			console.log("Compile successeful");
+			var output = document.getElementById("view_edit_output");
+			output.value = output.value + "\nCompilation Successufull";
+			//console.log("Compile successeful");
 		}
 		else{
-			console.log(response.compile_status);
+			var output = document.getElementById("view_edit_output");
+			output.value = output.value + "\n" + "Compilation Error::";
+			output.value = output.value + "\n" + response.compile_status;
 		}
 	}
 }
@@ -153,10 +157,15 @@ function runCode(source){
 function afterRun(response, source){
 	if(response.message == "OK"){
 		if(response.compile_status == "OK"){
-			console.log(response.run_status.output);
+			var output = document.getElementById("view_edit_output");
+			output.value = output.value + "\n" + response.run_status.output;
+			//console.log(response.run_status.output);
 		}
 		else{
-			console.log(response.compile_status);
+			var output = document.getElementById("view_edit_output");
+			output.value = output.value + "\n" + "Runtime Error::";
+			output.value = output.value + "\n" + response.compile_status;
+			//console.log(response.compile_status);
 		}
 	}
 }
