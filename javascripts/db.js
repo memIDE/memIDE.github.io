@@ -32,21 +32,38 @@ function addFunc(){
 function loadFuncs(){
    var userId = firebase.auth().currentUser.uid;
    var ref =  firebase.database().ref('/user-functions/' + userId);
-   var funcList = document.getElementById("submenu");
-   ref.once('value', function(snapshot) {
-      snapshot.forEach(function(childSnapshot) {
+   
 
-        var ul = document.getElementById("submenu");
+    // firebase.database().ref('/user-functions/' + userId).once('value').then(function(snapshot) {
+    //   var username = snapshot.val().username;
+    //   // ...
+    // });
+   var funcList = document.getElementById("submenu");
+
+
+    ref.orderByChild("title").startAt(startString).on("", function(snapshot) {
+         var ul = document.getElementById("submenu");
         var a = document.createElement("a");
         a.href = "#";
-        a.appendChild(document.createTextNode(childSnapshot.title ));
+        a.appendChild(document.createTextNode(snapshot.val().title ));
         var li = document.createElement("li");
         li.appendChild(a);
         ul.appendChild(li);
-         console.log(childSnapshot);
-        // ...
-      });
     });
+   // ref.once('value', function(snapshot) {
+   //    snapshot.forEach(function(childSnapshot) {
+
+   //      var ul = document.getElementById("submenu");
+   //      var a = document.createElement("a");
+   //      a.href = "#";
+   //      a.appendChild(document.createTextNode( snapshot.val().title ));
+   //      var li = document.createElement("li");
+   //      li.appendChild(a);
+   //      ul.appendChild(li);
+   //       console.log(childSnapshot);
+   //      // ...
+   //    });
+   //  });
 }
 
 function getFunc(startString, callback){
@@ -78,4 +95,15 @@ function getFunc(startString, callback){
 
     
 }
+
+function onloadMethod(){
+  firebase.auth().onAuthStateChanged(function(user) {
+  if (user) {
+    loadFuncs();
+  } else {
+    // No user is signed in.
+  }
+});
+}
+
 
