@@ -417,7 +417,7 @@
       if (0 == iFrom) {
         return strAdded + strOriginal.substring(iTo, strOriginal.length);
       } else {
-        strFirstChunk = strOriginal.substring(0, iFrom);
+        strFirstChunk = strOriginal.substring(0, iFrom-1);
         strLastChunk = strOriginal.substring(iTo, strOriginal.length);
         return strFirstChunk + strAdded + strLastChunk;
       }
