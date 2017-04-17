@@ -38,14 +38,15 @@ function getFunc(startString, callback){
     ref.orderByChild("title").startAt(startString).on("child_added", function(snapshot) {
       jsonArray.push(snapshot.val());
     });
-    console.log(jsonArray);
+    //console.log(jsonArray);
+    //console.log("in db");
+      //    console.log(jsonArray);
+
+          
+
     callback(jsonArray);
 }
 
-function test(){
-  alert("test");
-}
-  
 function importFunc(){
     
 }

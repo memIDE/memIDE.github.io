@@ -261,9 +261,9 @@
          }
 
       var name_temp = strCachedName.substring(1, strCachedName.length);
-      getFunc(name_temp, function(x){ fillItems(oData);});
-      test();
-
+      //console.log(name_temp);
+      getFunc(name_temp, function(x){ fillItems(x);  });
+    
       bindItemClicked();
     }
   }
@@ -274,9 +274,10 @@
    * @param object oData
    */
   function fillItems(oData){
+    //console.log(oData);
     if (oData.length > 0) {
       iListSize = oData.length;
-      console.log(oData);
+      //console.log(oData);
       
       var image_url = "image";
       $.each(oData, function(iKey, oValue){
