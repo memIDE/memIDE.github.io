@@ -39,8 +39,8 @@ function getFunc(startString, callback){
       jsonArray.push(snapshot.val());
     });
     //console.log(jsonArray);
-    //console.log("in db");
-      //    console.log(jsonArray);
+    console.log("in db");
+         console.log(jsonArray);
 
           
 
