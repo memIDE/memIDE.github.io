@@ -321,8 +321,10 @@
       strInputText,
       '@' + strUserName
     );
-
+    console.log(strReplacedText);
     strReplacedText = addBodyString(strReplacedText, strFunc);
+    console.log(strReplacedText);
+    console.log(strFunc);
     eTextArea.focus();
     eTextArea.val(strReplacedText.trim() + ' ');
 
