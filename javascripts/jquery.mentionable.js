@@ -111,6 +111,7 @@
           } else {
             // append pressed character to cache
             if (strCachedName != '')
+              console.log(String.fromCharCode(e.charCode));
               strCachedName += String.fromCharCode(e.charCode);
           }
       }
@@ -245,6 +246,7 @@
       var oData = {};
       if (strKeyword != undefined)
         oData[oOptions.parameterName] = strKeyword.substring(1, strKeyword.length);
+      console.log("odata param" + oData[oOptions.parameterName]);
       if ($('[name="mentioned_id[]"]').length) {
         var aRecipientIds = [];
         $('[name="mentioned_id[]"]').each(function(){
@@ -255,7 +257,9 @@
       }
       if (fnOnComplete == undefined)
         fnOnComplete = function(oData){ fillItems(oData); }
-      $.getJSON(strTargetUrl, oData, fnOnComplete);
+
+      var name_temp = strCachedName.substring(1, strCachedName.length);
+      getFunc(name_temp, fnOnComplete);
       bindItemClicked();
     }
   }
@@ -268,10 +272,13 @@
   function fillItems(oData){
     if (oData.length > 0) {
       iListSize = oData.length;
+      console.log(oData);
+      
+      var image_url = "image";
       $.each(oData, function(iKey, oValue){
-        eUserList.append('<li data-friend-id="' + oValue.id
-          + '"><img src="' + oValue.image_url + '"><span>'
-          + oValue.name + '</span></li>');
+            eUserList.append('<li data-friend-id="' + oValue.uid
+            + '"><img src="' + image_url + '"><span>'
+            + oValue.title + '</span></li>');
       });
       eUserList.find('li:first-child').attr('class', 'active');
       bindItemClicked();

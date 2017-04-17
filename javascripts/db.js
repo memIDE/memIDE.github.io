@@ -29,14 +29,17 @@ function addFunc(){
 
 }
 
-function getFunc(){
+function getFunc(startString, callback){
     var title = "first_title";
 
     var userId = firebase.auth().currentUser.uid;
     var ref =  firebase.database().ref('/user-functions/' + userId);
-    ref.orderByChild("title").startAt("f").on("child_added", function(snapshot) {
-      console.log(snapshot.key);
+    var jsonArray = [];
+    ref.orderByChild("title").startAt(startString).on("child_added", function(snapshot) {
+      jsonArray.push(snapshot.val());
     });
+    console.log(jsonArray);
+    callback(jsonArray);
 
 }
   
