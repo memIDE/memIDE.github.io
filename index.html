@@ -14,10 +14,100 @@
   
   <script type="text/javascript" src="./javascripts/linedtextarea.js"></script>
   <script type="text/javascript" src="./javascripts/post.js"></script>
-  <script type="text/javascript" src="./javascripts/db.js"></script>
   <link rel="stylesheet" type="text/css" href="./stylesheets/main.css" />
   <link rel="stylesheet" type="text/css" href="./stylesheets/linedtextarea.css" />
 
+  <style>
+     ul.wtf-menu{
+     margin: 100px auto 0px;
+     padding: 0px 10px;
+     width: 130px;
+     background: #fff;
+     height: 50px;
+     border-radius: 3px;
+     font-size: 14px;
+     
+     /* Dropdown shadow */
+     -webkit-box-shadow: 0 2px 2px 0 rgba(0,0,0,.3);
+     box-shadow: 0 2px 2px 0 rgba(0,0,0,.3);
+    }
+     
+    ul.wtf-menu li{
+     list-style: none;
+     float: left;
+     padding: 0px 0px;
+     margin: 0px 0px;
+     line-height: 50px;
+     display: block;
+     position: relative;
+     text-transform: uppercase;
+    }
+     
+    ul.wtf-menu li a{
+     color: #777;
+     padding: 0px 15px;
+     margin: 0px 0px;
+     display: block;
+    }
+     
+    ul.wtf-menu li a:hover{
+     color:#06BA6D;
+    }
+    .wtf-menu ul.submenu{
+    width: 180px;
+    padding: 0px 0px;
+    margin: 0px;
+    background: #fff;
+    position: absolute;
+    top:50px;
+    left:-10px;
+    display:none;
+ 
+    /*  Dropdown shadow */
+    -webkit-box-shadow: 0 2px 2px 0 rgba(0,0,0,.3);
+    box-shadow: 0 2px 2px 0 rgba(0,0,0,.3);
+  }
+  .wtf-menu ul.submenu ul{
+    left: 180px;
+    top:0px;
+}
+ 
+.wtf-menu ul.submenu li{
+    padding: 0px;
+    margin: 0px;
+    display: block;
+    float: none;
+    border-bottom: 1px solid #eee;
+    line-height: 40px;
+    text-transform: none;
+}
+ 
+.wtf-menu ul.submenu li:last-child{
+    border: none;
+  }
+  .wtf-menu li:hover > ul{
+    display:block;
+    -moz-animation: fadeInDown .3s ease-in ;
+    -webkit-animation: fadeInDown .3s ease-in ;
+    animation:fadeInDown .3s ease-in ;
+}
+ 
+.wtf-menu ul li:hover > ul{
+    display:block;
+    -moz-animation: fadeInLeft .3s ease-in ;
+    -webkit-animation: fadeInLeft .3s ease-in ;
+    animation:fadeInLeft .3s ease-in ;
+}
+
+  div.fixed{
+    position: fixed;
+    top: 30px;
+    right: 160px;
+    width: 140px;
+    height: 300px;
+    <!-- border: 3px solid #73AD21; -->
+  }
+  </style>
 </head>
 
 <body>
@@ -52,13 +142,33 @@
 
 <div class="container">
 <!-- <form action="/api/compile" method="post">
- -->  <textarea class="lined" rows="25" cols="150" id="source"></textarea>  
+ -->  <textarea class="lined" rows="25" cols="120" id="source"></textarea>  
   <!-- <input type="submit" value="Email" class="submitButton"> -->
   <button onclick="compile()">Compile</button>
-  <button onclick="addFunc()">Run</button>
+  <button onclick="run()">Run</button>
 
 <!-- </form> -->
+
+<div class="funcAdder">
+
 </div>
+<div class="fixed" style="color:blue">
+  <nav class="menu-1">
+    <ul class="wtf-menu">
+        <li class="parent"> <a href="#">Functions</a> 
+            <ul class="submenu">
+                <li> <a href="#">func1</a> </li>
+                <li> <a href="#">func2</a> </li>
+                <li> <a href="#">func3</a> </li>
+                <li> <a href="#">func4</a> </li>
+                <li> <a href="#">add function</a> </li>
+
+            </ul>
+        </li>
+    </ul>
+  </nav>
+</div>
+
 
 <script>
 $(function() {
@@ -115,7 +225,7 @@ $(function() {
         <li><a href="https://devcenter.heroku.com/articles/deploying-nodejs">Deploying Node Apps on Heroku</a></li>
       </ul>
     </div>
-  </div> <!-- row -->
+  </div> 
    <div class="alert alert-info text-center" role="alert">
     Please do work through the Getting Started guide, even if you do know how to build such an application.  The guide covers the basics of working with Heroku, and will familiarize you with all the concepts you need in order to build and deploy your own apps.
   </div>
