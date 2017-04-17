@@ -441,13 +441,13 @@
                   console.log(strLastChunk1);
                            console.log(strAdded);
 
-        return strFirstChunk1 + strAdded + strLastChunk1;
+        return strFirstChunk1 + "\n//** Function added via import\n" + strAdded + "\n\n" + strLastChunk1;
 
       }
       else{
          console.log(strAdded);
                            console.log(strOriginal);
-        return strAdded + strOriginal; 
+        return strAdded +"\n"+ strOriginal; 
       }
   }
 
