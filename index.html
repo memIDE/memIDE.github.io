@@ -104,20 +104,8 @@
     animation:fadeInLeft .3s ease-in ;
 }
 
-  div.fixed{
-    position: fixed;
-    left : 180px;
-    width: 140px;
-    float: right;
-    <!-- border: 3px solid #73AD21; -->
-  }
+  
   span.container{
-    position: relative;
-    float: left;
-    left: 25%;
-    <!-- border: 3px solid #73AD21; -->
-  }
-  span.inout{
     position: relative;
     float: left;
     left: 25%;
@@ -135,26 +123,11 @@
 
   }
   
-  div.inout{
-    position: relative;
-    left: 25.7%;
-  }
+  
   div.io_header{
     position: relative;
     top: 405px;
     right: 1150px;
-  }
-
-  #view_edit_input{
-    position: relative;
-    top: 465px;
-    right: 1150px;
-
-  }
-  #view_edit_output{
-    position: relative;
-    top: 465px;
-    right: 1050px;
   }
 
   .box {
@@ -232,6 +205,34 @@
 }
 
   </style>
+
+<style type="text/css" media="screen">
+    html, body{
+    height: 100%;
+    }
+    
+    div.fixed{
+        float: left;
+        margin-left: 3%;
+        margin-right: 5%;
+    }
+    
+    #editor { 
+        height: 55%;
+        width: 50%;
+        float: left;
+    }
+    
+    div.inout{   
+        display: inline-block;
+        margin: 3%;
+    }
+    
+    #editor_footer{   
+        display: inline-block;
+        margin: 3%;
+    }
+</style>
 </head>
 
 <body onload = "onloadMethod()">
@@ -248,9 +249,8 @@
 </nav>
 
 
-<span class="container">
-<!-- <form action="/api/compile" method="post">
- -->  <textarea class="lined" rows="25" cols="100" id="source"></textarea>  
+<!-- <span class="container">
+ <textarea class="lined" rows="25" cols="100" id="source"></textarea>  
 
  <script type="text/javascript">
     $("#source").mentionable(
@@ -258,31 +258,41 @@
         {minimumChar: 2, parameterName: "name"}
     );
   </script>
-  <!-- <input type="submit" value="Email" class="submitButton"> -->
   <button id="compile_button" onclick="compile()">Compile</button>
-  <!-- <button id="run_button" onclick="run()">Run</button>
- -->
-</span>
+</span> -->
 
-<!-- </form> -->
-<!-- 
-<div class="funcAdder">
 
-</div> -->
 <div class="fixed" style="color:blue">
   <nav class="menu-1">
     <ul class="wtf-menu">
         <li class="parent"> <a href="#">Functions</a> 
             <ul id="submenu" class="submenu">
-                <!-- <li> <a href="#">func1</a> </li>
-                <li> <a href="#">func2</a> </li>
-                <li> <a href="#">func3</a> </li>
-                <li> <a href="#">func4</a> </li> -->
                 <li> <a href="#popup1">add function</a> </li>
             </ul>
         </li>
     </ul>
   </nav>
+</div>
+    
+<div id="editor">#include &lt;iostream&gt;
+using namespace std;
+
+int main() {
+	// your code goes here
+	cout<<"test \n test2";
+	return 0;
+}
+</div>
+    
+<script src="/ace-builds/src-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
+<script>
+    var editor = ace.edit("editor");
+    editor.setTheme("ace/theme/monokai");
+    editor.getSession().setMode("ace/mode/c_cpp");
+</script>
+
+<div id="editor_footer">
+    <button id="compile_button" onclick="compile()">Compile</button>
 </div>
 
 <div class="inout">
@@ -294,7 +304,7 @@
   </div-->
   <textarea name="view_edit_input" id="view_edit_input" placeholder="Input" rows="8" cols="40" tabindex="1" style="height: 160px;"></textarea>
   <textarea name="view_edit_output" id="view_edit_output" placeholder="Output" rows="8" cols="40" tabindex="1" style="height: 160px;" readonly></textarea>
-  </div>
+  
 </div>
 
 <!-- <div class="inout">
@@ -323,59 +333,6 @@ $(function() {
   );
 });
 </script>
-
-<!-- <div class="jumbotron text-center">
-  <div class="container">
-    <a href="/" class="lang-logo">
-      <img src="/lang-logo.png">
-    </a>
-    <h1>Getting Started with Node on Heroku</h1>
-    <p>This is a sample Node application deployed to Heroku. It's a reasonably simple app - but a good foundation for understanding how to get the most out of the Heroku platform.</p>
-    <a type="button" class="btn btn-lg btn-default" href="https://devcenter.heroku.com/articles/getting-started-with-nodejs"><span class="glyphicon glyphicon-flash"></span> Getting Started with Node</a>
-    <a type="button" class="btn btn-lg btn-primary" href="https://github.com/heroku/node-js-getting-started"><span class="glyphicon glyphicon-download"></span> Source on GitHub</a>
-  </div>
-</div>
-<div class="container">
-  <div class="alert alert-info text-center" role="alert">
-    To deploy your own copy, and learn the fundamentals of the Heroku platform, head over to the <a href="https://devcenter.heroku.com/articles/getting-started-with-nodejs" class="alert-link">Getting Started with Node on Heroku</a> tutorial.
-  </div>
-  <hr>
-  <div class="row">
-    <div class="col-md-6">
-      <h3><span class="glyphicon glyphicon-info-sign"></span> How this sample app works</h3>
-      <ul>
-        <li>This app was deployed to Heroku, either using Git or by using <a href="https://github.com/heroku/node-js-getting-started">Heroku Button</a> on the repository.</li>
-
-        <li>When Heroku received the source code, it fetched all the dependencies in the <a href="https://github.com/heroku/node-js-getting-started/blob/master/package.json">package.json</a>, creating a deployable slug.</li>
-        <li>The platform then spins up a dyno, a lightweight container that provides an isolated environment in which the slug can be mounted and executed.</li>
-        <li>You can scale your app, manage it, and deploy over <a href="https://addons.heroku.com/">150 add-on services</a>, from the Dashboard or CLI.</li>
-      </ul>
-    </div>
-    <div class="col-md-6">
-      <h3><span class="glyphicon glyphicon-link"></span> Next Steps</h3>
-      <ul>
-        <li>If you are following the <a href="https://devcenter.heroku.com/articles/getting-started-with-nodejs">Getting Started</a> guide, then please head back to the tutorial and follow the next steps!</li>
-        <li>If you deployed this app by deploying the Heroku Button, then in a command line shell, run:</li>
-        <ul>
-          <li><code>git clone https://github.com/heroku/node-js-getting-started.git</code> - this will create a local copy of the source code for the app</li>
-          <li><code>cd node-js-getting-started</code> - change directory into the local source code repository</li>
-          <li><code>heroku git:remote -a &lt;your-app-name></code> - associate the Heroku app with the repository</li>
-          <li>You'll now be set up to run the app locally, or <a href="https://devcenter.heroku.com/articles/getting-started-with-nodejs#push-local-changes">deploy changes</a> to Heroku</li>
-        </ul>
-      </ul>
-      <h3><span class="glyphicon glyphicon-link"></span> Helpful Links</h3>
-      <ul>
-        <li><a href="https://www.heroku.com/home">Heroku</a></li>
-        <li><a href="https://devcenter.heroku.com/">Heroku Dev Center</a></li>
-        <li><a href="https://devcenter.heroku.com/articles/getting-started-with-nodejs">Getting Started with Node on Heroku</a></li>
-        <li><a href="https://devcenter.heroku.com/articles/deploying-nodejs">Deploying Node Apps on Heroku</a></li>
-      </ul>
-    </div>
-  </div> 
-   <div class="alert alert-info text-center" role="alert">
-    Please do work through the Getting Started guide, even if you do know how to build such an application.  The guide covers the basics of working with Heroku, and will familiarize you with all the concepts you need in order to build and deploy your own apps.
-  </div>
-</div> -->
 
 
 </body>

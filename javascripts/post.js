@@ -58,7 +58,7 @@ function addAttribute(key, value){
 }
 
 function compile() {
-	var source = document.getElementById("source").value;
+	var source = document.getElementsByClassName("ace_content")[0].innerText;
 	// var data = {};
 	// data["source"] = source;
 
@@ -112,20 +112,17 @@ function compile() {
 }
 
 function afterCompile(response, source){
-	console.log(response.message);
-	if(response.message == "OK"){
-		if(response.compile_status == "OK"){
-			runCode(source);
-			var output = document.getElementById("view_edit_output");
-			output.value = output.value + "\nCompilation Successufull";
-			//console.log("Compile successeful");
-		}
-		else{
-			var output = document.getElementById("view_edit_output");
-			output.value = output.value + "\n" + "Compilation Error::";
-			output.value = output.value + "\n" + response.compile_status;
-		}
-	}
+    if(response.compile_status == "OK"){
+        runCode(source);
+        var output = document.getElementById("view_edit_output");
+        output.value = output.value + "\nCompilation Successufull";
+        //console.log("Compile successeful");
+    }
+    else{
+        var output = document.getElementById("view_edit_output");
+        output.value = output.value + "\n" + "Compilation Error::";
+        output.value = output.value + "\n" + response.compile_status;
+    }
 }
 
 function runCode(source){
@@ -155,17 +152,15 @@ function runCode(source){
 }
 
 function afterRun(response, source){
-	if(response.message == "OK"){
-		if(response.compile_status == "OK"){
-			var output = document.getElementById("view_edit_output");
-			output.value = output.value + "\n" + response.run_status.output;
-			//console.log(response.run_status.output);
-		}
-		else{
-			var output = document.getElementById("view_edit_output");
-			output.value = output.value + "\n" + "Runtime Error::";
-			output.value = output.value + "\n" + response.compile_status;
-			//console.log(response.compile_status);
-		}
-	}
+    if(response.compile_status == "OK"){
+        var output = document.getElementById("view_edit_output");
+        output.value = output.value + "\n" + response.run_status.output;
+        //console.log(response.run_status.output);
+    }
+    else{
+        var output = document.getElementById("view_edit_output");
+        output.value = output.value + "\n" + "Runtime Error::";
+        output.value = output.value + "\n" + response.compile_status;
+        //console.log(response.compile_status);
+    }
 }
