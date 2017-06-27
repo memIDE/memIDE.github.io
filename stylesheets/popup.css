@@ -1,0 +1,71 @@
+.overlay {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(0, 0, 0, 0.7);
+    transition: opacity 500ms;
+    visibility: hidden;
+    opacity: 0;
+    z-index: 1000;
+}
+
+.overlay:target {
+    visibility: visible;
+    opacity: 1;
+}
+
+.popup {
+    margin: auto;
+    padding: 1.5%;
+    background: #fff;
+    border-radius: 5px;
+    width: 40%;
+    position: relative;
+    display: block;
+    height: 75%;
+    display: flex;
+    flex-direction: column;
+    margin-top: 5%;
+    margin-bottom: 5%;
+    transition: all 10s ease-in-out;
+}
+
+#popup_title {
+    height: auto;
+}
+
+.popup h2 {
+    margin-top: 0;
+    color: #333;
+    font-family: Tahoma, Arial, sans-serif;
+}
+
+.popup .close {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    transition: all 200ms;
+    font-size: 30px;
+    font-weight: bold;
+    text-decoration: none;
+    color: #333;
+}
+
+.popup .close:hover {
+    color: orange;
+}
+
+.popup .content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+#func_editor {
+    flex: 1;
+    margin: 5%;
+    margin-top: 2%;
+    margin-bottom: 2%;
+}

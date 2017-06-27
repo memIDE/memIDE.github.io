@@ -1,51 +1,86 @@
-.jumbotron {
-  background: #532F8C;
-  color: white;
-  padding-bottom: 80px; }
-  .jumbotron .btn-primary {
-    background: #845ac7;
-    border-color: #845ac7; }
-    .jumbotron .btn-primary:hover {
-      background: #7646c1; }
-  .jumbotron p {
-    color: #d9ccee;
-    max-width: 75%;
-    margin: 1em auto 2em; }
-  .navbar + .jumbotron {
-    margin-top: -20px; }
-  .jumbotron .lang-logo {
-    display: block;
-    background: #B01302;
-    border-radius: 50%;
-    overflow: hidden;
-    width: 100px;
-    height: 100px;
-    margin: auto;
-    border: 2px solid white; }
-    .jumbotron .lang-logo img {
-      max-width: 100%; }
-
-.textbox-large {
-    -moz-border-radius: 5px;
-    -webkit-border-radius: 5px;
-    background-color: #EAEAEA;
-    background: -moz-linear-gradient(top, #FFF, #EAEAEA);
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0.0, #FFF), color-stop(1.0, #EAEAEA));
-    border: 1px solid #CACACA;
-    color: #444;
-    font-size: 1.0em;
-    padding: 5px 9px;
+html,
+body {
+    height: 100%;
     width: 100%;
-    height: 500px;
-    margin: 20px;
-}
- .textbox-large:focus {
-    background: #FFF;
-    -webkit-box-shadow: 0 0 25px #CCC;
-    -moz-box-shadow: 0 0 25px #ccc;
-    box-shadow: 0 0 25px #CCC;
-    -webkit-transform: scale(1.05);
-    -moz-transform: scale(1.05);
-    transform: scale(1.05);
 }
 
+#editor_container {
+    height: 100%;
+    width: 50%;
+    float: left;
+}
+
+div.fixed {
+    float: left;
+    margin-left: 3%;
+    margin-right: 5%;
+}
+
+#editor {
+    display: block;
+    width: 100%;
+    height: 50%;
+}
+
+#editor_footer {
+    display: inline-block;
+    margin: 3%;
+    width: 100%;
+}
+
+#inout {
+    display: block;
+    margin: 3%;
+    height: auto;
+}
+
+span.container {
+    position: relative;
+    float: left;
+    left: 25%;
+    <!-- border: 3px solid #73AD21;
+    -->
+}
+
+#compile_button {
+    float: right;
+    margin-right: 3%;
+}
+
+#run_button {
+    float: right;
+    position: relative;
+    right: 22.1%;
+}
+
+div.io_header {
+    position: relative;
+    top: 405px;
+    right: 1150px;
+}
+
+.box {
+    width: 20%;
+    margin: 0 auto;
+    background: rgba(255, 255, 255, 0.2);
+    padding: 35px;
+    border: 2px solid #fff;
+    border-radius: 20px/50px;
+    background-clip: padding-box;
+    text-align: center;
+}
+
+.button {
+    font-size: 1em;
+    padding: 10px;
+    color: #fff;
+    border: 2px solid orange;
+    border-radius: 20px/50px;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.3s ease-out;
+}
+
+.button:hover {
+    background: orange;
+}
