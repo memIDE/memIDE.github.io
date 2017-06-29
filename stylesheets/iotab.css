@@ -1,0 +1,13 @@
+#exTab {
+  width: inherit;
+}
+#exTab h3 {
+  color : white;
+  background-color: #428bca;
+  padding : 5px 15px;
+}
+
+#view_edit_io {
+  height: 160px;
+  width: 100%;
+}

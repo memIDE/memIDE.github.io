@@ -73,7 +73,7 @@ label {
     margin-right: 3px;
 }
 
-input[type=text], textarea {
+input[type=text]{
     width: 200px;
 }
 
